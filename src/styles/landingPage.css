@@ -1,0 +1,42 @@
+.landing-page {
+    background-image: url(https://images.unsplash.com/photo-1542614471-001ccf2b449c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60);
+    background-size: cover;
+    height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 100vh;
+}
+
+@media (max-width: 992px) {
+    .landing-page {
+        color: aliceblue;
+        text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.916);
+    }
+}
+
+@media (min-width: 992px) {
+    .landing-page {
+        color: silver;
+    }
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.landing-page h1 {
+    text-align: center;
+}
+
+.landing-page p {
+    text-align: center;
+}
+
+.hover-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: background-color 0.3s ease-in-out;
+}
