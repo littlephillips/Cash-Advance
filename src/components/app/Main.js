@@ -19,6 +19,7 @@ const ErrorPage = lazy(() => import('../../pages/errorPage/ErrorPage'));
 const Unauthorized = lazy(() => import('../../pages/anauthorized/Unauthorized'));
 const ThankYouPage = lazy(() => import('../../pages/thankyou/ThankYouPage'));
 
+
 function Main() {
 const [isAuthenticated, setIsAuthenticated] = useState(false);
 const location = useLocation();

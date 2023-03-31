@@ -145,7 +145,3 @@ export default CollectLoanForm;
 
 
 
-
-
-// using react bootstrap and react-responsive modify this component to be fully repsonsive 
-
