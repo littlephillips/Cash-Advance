@@ -135,7 +135,7 @@ function Office({ isAuthenticated, onLogout}) {
         {isAuthenticated && (
           <a href='#disburse'>
             <Button variant="info" className="mb-3 ml-2">
-              Top
+            🔝 Top
             </Button>
           </a>
         )}
