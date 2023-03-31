@@ -54,9 +54,10 @@ const Supervisor = ({ isAuthenticated, onLogout }) => {
       <Container className="p-3">
         <h1 className="mb-3">Loan Requests</h1>
         {isAuthenticated && (
-          <Button variant="danger" className="mb-3" onClick={handleLogout}>
-          Logout
+          <Button variant="danger" className="mb-3 float-end" onClick={handleLogout}>
+            Logout
           </Button>
+
         )}
         <Table striped bordered hover>
           <thead>
