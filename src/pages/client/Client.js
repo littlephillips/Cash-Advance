@@ -86,7 +86,7 @@ const Client = ({ isAuthenticated, onLogout }) => {
 
   return (
     <Container>
-      <Row className="justify-content-end mt-3">
+      <Row className="justify-content-end">
         <Col md={6}>
           {showAlert && (
             <div className={`alert alert-${alertVariant}`} role="alert">
@@ -94,25 +94,27 @@ const Client = ({ isAuthenticated, onLogout }) => {
             </div>
           )}
         </Col>
-        <Col md={2} className="text-right">
+
+        <div className="d-flex justify-content-evenly  mt-3" id="top">
           {isAuthenticated && (
-            <Button variant="danger" onClick={handleLogout}>
+          <a href='#pay' className="float-left mr-2">
+          <Button variant="info" className="mb-3">
+          Pay Loan
+          </Button>
+          </a>
+          )}
+
+        {isAuthenticated && (
+            <Button variant="danger" className="mb-3" 
+            style={{marginRight: '10px'}} onClick={handleLogout}>
               Logout
             </Button>
           )}
-
-        <a href="#pay">
-          <Button variant="info" className='mr-10'>
-            Pay Loan
-          </Button>
-        </a>
-
-
-        </Col>
+          </div>
       </Row>
       <Row>
         <Col>
-          <h1 className="mt-3"  id="top">Welcome to Loan Application Form</h1>
+          <h1 className="mt-3"  >Welcome to Loan Application Form</h1>
           <Form onSubmit={handleSubmit} id="top">
             <Form.Group controlId="fullNameInput" className="mt-3">
               <Form.Label>Full Name</Form.Label>
@@ -242,7 +244,8 @@ const Client = ({ isAuthenticated, onLogout }) => {
             </Modal.Footer>
           </Modal>
           <div id="pay">
-          <h1 className="mt-3">Pay Loan </h1>
+            <hr/>
+          <h1 className="text-center mt-3">Pay Loan </h1>
           <PaymentForm/> 
           </div>
           <a href="#top">
