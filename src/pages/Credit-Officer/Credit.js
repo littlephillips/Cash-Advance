@@ -38,17 +38,9 @@
             </Row>
         )}
 
-        {isAuthenticated && (
-            <Button variant="danger" onClick={handleLogoutClick} className="ms-auto">
-                Logout
-            </Button>
-        )}
-
-
         <Navbar bg="light" expand="lg" className="justify-content-between">
             <Container fluid>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
-
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className={isMobile ? 'flex-column' : 'me-auto'}>
                 <NavLink
@@ -79,8 +71,12 @@
                     Collect Data
                 </NavLink>
                 </Nav>
-                {/* logout */}
             </Navbar.Collapse>
+            {isAuthenticated && (
+            <Button variant="danger" className="float-end ms-auto" onClick={handleLogoutClick}>
+            Logout
+            </Button>
+        )} 
             </Container>
         </Navbar>
 
