@@ -7,6 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import Dashboard from '../AdministrationPage/Dashboard';
 import withAuth from '../../components/withAuth/withAuth';
 
+const endpoint = process.env.REACT_APP_API_URL;
 
 function Office({ isAuthenticated, onLogout}) {
   const [loanRequests, setLoanRequests] = useState([]);
@@ -15,14 +16,14 @@ function Office({ isAuthenticated, onLogout}) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://127.0.0.1:3000/loans')
+    fetch(`${endpoint}/loans`)
       .then((response) => response.json())
       .then(data => setLoanRequests(data))
       .catch((error) => console.log(error));
   }, []);
 
   const handleDisburse = (id, loanDisbursed) => {
-    fetch(`http://localhost:3000/loans/${id}`, {
+    fetch(`${endpoint}/loans/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 
+const endpoint = process.env.REACT_APP_API_URL;
+
 const CollectLoanForm= () => {
     const [formData, setFormData] = useState({
         fullName: '',
@@ -17,7 +19,7 @@ const [alertVariant, setAlertVariant] = useState('');
 const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-    const response = await fetch('http://localhost:3000/datums', {
+    const response = await fetch(`${endpoint}/datums`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',

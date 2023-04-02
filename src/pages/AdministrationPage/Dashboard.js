@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap';
 
+const endpoint = process.env.REACT_APP_API_URL;
+
 const Dashboard = () => {
 const [customers, setCustomers] = useState([]);
 const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -12,7 +14,7 @@ const [unallocatedReceipts, setUnallocatedReceipts] = useState([]);
 
 useEffect(() => {
     const fetchData = async () => {
-    const response = await fetch('http://127.0.0.1:3000/payment');
+    const response = await fetch(`${endpoint}/payment`);
     const jsonData = await response.json();
     setCustomers(jsonData);
     };

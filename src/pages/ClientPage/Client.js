@@ -6,6 +6,8 @@ import { Container, Row, Col, Form, Button, Modal } from 'react-bootstrap';
 import PaymentForm from './PaymentForm';
 import withAuth from '../../components/withAuth/withAuth';
 
+const endpoint = process.env.REACT_APP_API_URL;
+
 const Client = ({ isAuthenticated, onLogout }) => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -29,7 +31,7 @@ const Client = ({ isAuthenticated, onLogout }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:3000/clients', {
+      const response = await fetch(`${endpoint}/clients`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -5,6 +5,8 @@ import jwtDecode from 'jwt-decode';
 
 import withAuth from '../../components/withAuth/withAuth';
 
+const endpoint = process.env.REACT_APP_API_URL;
+
 function Login( {setIsAuthenticated}) {
 const [formData, setFormData] = useState({
     email: '',
@@ -23,7 +25,7 @@ const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-    const response = await fetch('http://127.0.0.1:3000/sessions', {
+    const response = await fetch(`${endpoint}/sessions`, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',

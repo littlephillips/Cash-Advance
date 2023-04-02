@@ -2,6 +2,8 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
+const endpoint = process.env.REACT_APP_API_URL;
+
 function Signup() {
 const [formData, setFormData] = useState({
     fullname: '',
@@ -25,7 +27,7 @@ const handleInputChange = (e) => {
 const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-    const response = await fetch('http://127.0.0.1:3000/user', {
+    const response = await fetch(`${endpoint}/user`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ user: formData }),

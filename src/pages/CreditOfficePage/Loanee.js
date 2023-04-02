@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
 
+const endpoint = process.env.REACT_APP_API_URL;
+
 const Loanee = () => {
 const [data, setData] = useState([]);
 
 useEffect(() => {
     const fetchData = async () => {
-    const response = await fetch('http://127.0.0.1:3000/clients');
+    const response = await fetch(`${endpoint}/clients`);
     const jsonData = await response.json();
     setData(jsonData);
     };

@@ -4,6 +4,8 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 // loans
 import LoanTable from './LoanTable';
 
+const endpoint = process.env.REACT_APP_API_URL;
+
 const CreateLoanForm = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -20,7 +22,7 @@ const CreateLoanForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch('http://localhost:3000/loans', {
+      const response = await fetch(`${endpoint}/loans`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

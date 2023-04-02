@@ -4,19 +4,21 @@ import { Container, Table, Button } from "react-bootstrap";
 
 import withAuth from "../../components/withAuth/withAuth";
 
+const endpoint = process.env.REACT_APP_API_URL;
+
 const Supervisor = ({ isAuthenticated, onLogout }) => {
   const [loanRequests, setLoanRequests] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3000/loans')
+    fetch(`${endpoint}/loans`)
       .then(response => response.json())
       .then(data => setLoanRequests(data))
       .catch(error => console.error(error));
   }, []);
 
   const updateLoanStatus = (id, loanStatus) => {
-    fetch(`http://localhost:3000/loans/${id}`, {
+    fetch(`${endpoint}/loans/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -89,7 +91,7 @@ const Supervisor = ({ isAuthenticated, onLogout }) => {
                     Approve
                   </Button>
                   <Button
-                    className="mt-3"
+                    style={{ marginLeft: "10px" }}
                     variant="danger"
                     onClick={() => handleRejectLoan(request.id)}
                   >
@@ -117,9 +119,5 @@ const Supervisor = ({ isAuthenticated, onLogout }) => {
   );
 };
 export default withAuth(Supervisor, 'Supervisor');
-
-
-
-// // using react bootstrap and react-responsive modify this component to be fully repsonsive 
 
 

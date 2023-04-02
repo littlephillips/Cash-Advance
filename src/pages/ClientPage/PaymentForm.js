@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
+
+const endpoint = process.env.REACT_APP_API_URL;
+
 function PaymentForm() {
 const [formData, setFormData] = useState({
     amount: '',
@@ -15,7 +18,7 @@ const navigate = useNavigate();
 const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-    const response = await fetch('http://127.0.0.1:3000/payment', {
+    const response = await fetch(`${endpoint}/payment`, {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {
