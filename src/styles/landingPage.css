@@ -27,11 +27,8 @@
     margin-top: 20px;
 }
 
-.landing-page h1 {
-    text-align: center;
-}
-
-.landing-page p {
+.landing-page h1,
+.landing-page p{
     text-align: center;
 }
 

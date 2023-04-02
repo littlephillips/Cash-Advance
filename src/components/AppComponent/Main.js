@@ -5,19 +5,18 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 
 // navbar
-const Header = lazy(() => import('../Navbar/Header'));
+const Header = lazy(() => import('../NavbarComponent/Header'));
 
 // pages 
-const LandingPage = lazy(() => import('../../pages/homepage/LandingPage'));
-const Login = lazy(() => import('../../pages/register/Login'));
-const Signup = lazy(() => import('../../pages/register/Signup'));
-const Client = lazy(() => import( '../../pages/client/Client'));
-const Credit = lazy(() => import('../../pages/Credit-Officer/Credit'));
-const Supervisor = lazy(() => import('../../pages/supervisor/Supervisor'));
-const Office = lazy(() => import('../../pages/office/Office'));
-const ErrorPage = lazy(() => import('../../pages/errorPage/ErrorPage'));
-const Unauthorized = lazy(() => import('../../pages/anauthorized/Unauthorized'));
-const ThankYouPage = lazy(() => import('../../pages/thankyou/ThankYouPage'));
+const LandingPage = lazy(() => import('../../pages/HomePage/LandingPage'));
+const Login = lazy(() => import('../../pages/RegistrationPage/Login'));
+const Signup = lazy(() => import('../../pages/RegistrationPage/Signup'));
+const Client = lazy(() => import( '../../pages/ClientPage/Client'));
+const Credit = lazy(() => import('../../pages/CreditOfficePage/Credit'));
+const Supervisor = lazy(() => import('../../pages/SupervisorPage/Supervisor'));
+const Office = lazy(() => import('../../pages/OfficePage/Office'));
+const ErrorPage = lazy(() => import('../../pages/ErrorPage/ErrorPage'));
+const Unauthorized = lazy(() => import('../../pages/UnauthorizedPage/Unauthorized'));
 
 
 function Main() {
@@ -60,7 +59,6 @@ return (
             </>
         )}
         <Route exact path="/unauthorized" element={<Unauthorized />} />
-        <Route exact path="/thankyou" element={<ThankYouPage/>} />
         <Route exact path="*" element={<ErrorPage />} />
         </Routes>
     </Suspense>

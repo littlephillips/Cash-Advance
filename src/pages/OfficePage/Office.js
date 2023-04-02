@@ -4,7 +4,7 @@ import {  useNavigate } from 'react-router-dom';
 
 import { useMediaQuery } from 'react-responsive';
 
-import Dashboard from '../adminstration/Dashboard';
+import Dashboard from '../AdministrationPage/Dashboard';
 import withAuth from '../../components/withAuth/withAuth';
 
 

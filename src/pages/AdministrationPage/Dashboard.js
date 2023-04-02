@@ -6,6 +6,8 @@ const Dashboard = () => {
 const [customers, setCustomers] = useState([]);
 const [selectedCustomer, setSelectedCustomer] = useState(null);
 const [customerReceipts, setCustomerReceipts] = useState([]);
+
+// eslint-disable-next-line
 const [unallocatedReceipts, setUnallocatedReceipts] = useState([]);
 
 useEffect(() => {
