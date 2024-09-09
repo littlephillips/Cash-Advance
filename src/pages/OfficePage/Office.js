@@ -144,6 +144,5 @@ function Office({ isAuthenticated, onLogout}) {
         </Container>
         );
         }
-        // Office.allowedUserType = 'Office Staff';
 
         export default withAuth(Office, 'Office Staff', 'Administration Staff');
