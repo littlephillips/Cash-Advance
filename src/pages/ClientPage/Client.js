@@ -1,262 +1,99 @@
 import React, { useState } from 'react';
-import { useNavigate  } from 'react-router-dom';
-import { Container, Row, Col, Form, Button, Modal } from 'react-bootstrap';
-
-// payment page
-import PaymentForm from './PaymentForm';
+import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Button, Card, Modal } from 'react-bootstrap';
 import withAuth from '../../components/withAuth/withAuth';
-
-const endpoint = process.env.REACT_APP_API_URL;
+import LoanForm from '../ClientPage/LoanForm';
+import PaymentForm from '../ClientPage/PaymentForm'; 
 
 const Client = ({ isAuthenticated, onLogout }) => {
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    age: '',
-    gender: '',
-    loanAmount: '',
-    businessHistory: '',
-    businessLocation: '',
-  });
-
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertVariant, setAlertVariant] = useState('');
-
-  const [showThankYouModal, setShowThankYouModal] = useState(false);
-
   const navigate = useNavigate();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await fetch(`${endpoint}/clients`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.status === 201) {
-        // Show success alert
-        setAlertVariant('success');
-        setAlertMessage('Loan Application successfully!');
-        setShowAlert(true);
-
-        // Show thank you modal
-        setShowThankYouModal(true);
-      } else {
-        throw new Error('Network response was not ok');
-      }
-    } catch (error) {
-      // Show error alert
-      setAlertVariant('danger');
-      setAlertMessage('Loan Application Failed! Try Again');
-      setShowAlert(true);
-    }
-
-    // Reset form data
-    setFormData({
-      fullName: '',
-      email: '',
-      phone: '',
-      age: '',
-      gender: '',
-      loanAmount: '',
-      businessHistory: '',
-      businessLocation: '',
-    });
-
-    // Hide alert after 1 second
-    setTimeout(() => {
-      setShowAlert(false);
-    }, 1000);
-  };
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [showRepayModal, setShowRepayModal] = useState(false);
 
   const handleLogout = () => {
     onLogout();
-    navigate("/")
-  }
-
-  const handleCloseThankYouModal = () => {
-    setShowThankYouModal(false);
-    onLogout();
-    navigate('/');
+    navigate("/");
   };
+
+  const handleCloseApply = () => setShowApplyModal(false);
+  const handleShowApply = () => setShowApplyModal(true);
+
+  const handleCloseRepay = () => setShowRepayModal(false);
+  const handleShowRepay = () => setShowRepayModal(true);
 
   return (
-    <Container>
-      <Row className="justify-content-end">
-        <Col md={6}>
-          {showAlert && (
-            <div className={`alert alert-${alertVariant}`} role="alert">
-              {alertMessage}
-            </div>
-          )}
-        </Col>
-
-        <div className="d-flex justify-content-evenly  mt-3" id="top">
-          {isAuthenticated && (
-          <a href='#pay' className="float-left mr-2">
-          <Button variant="info" className="mb-3">
-          Pay Loan
-          </Button>
-          </a>
-          )}
-
+    <Container className="mt-4">
+      <Row className="justify-content-end mb-3">
         {isAuthenticated && (
-            <Button variant="danger" className="mb-3" 
-            style={{marginRight: '10px'}} onClick={handleLogout}>
+          <Col xs="auto">
+            <Button variant="danger" onClick={handleLogout}>
               Logout
             </Button>
-          )}
-          </div>
+          </Col>
+        )}
       </Row>
-      <Row>
-        <Col>
-          <h1 className="mt-3"  >Welcome to Loan Application Form</h1>
-          <Form onSubmit={handleSubmit} id="top">
-            <Form.Group controlId="fullNameInput" className="mt-3">
-              <Form.Label>Full Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter full name"
-                value={formData.fullName}
-                onChange={(event) =>
-                  setFormData({ ...formData, fullName: event.target.value })
-                }
-              />
-            </Form.Group>
 
-            <Form.Group controlId="emailInput" className="mt-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={formData.email}
-                onChange={(event) =>
-                setFormData({ ...formData, email: event.target.value })
-                }
-                />
-                </Form.Group>
-
-                <Form.Group controlId="phoneInput" className="mt-3">
-                  <Form.Label>Phone Number</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter phone number"
-                    value={formData.phone}
-                    onChange={(event) =>
-                      setFormData({ ...formData, phone: event.target.value })
-                    }
-                  />
-                </Form.Group>
-        
-                <Form.Group controlId="ageInput" className="mt-3">
-                  <Form.Label>Age</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Enter age"
-                    value={formData.age}
-                    onChange={(event) =>
-                      setFormData({ ...formData, age: event.target.value })
-                    }
-                  />
-                </Form.Group>
-        
-                <Form.Group controlId="genderInput" className="mt-3">
-                  <Form.Label>Gender</Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={formData.gender}
-                    onChange={(event) =>
-                      setFormData({ ...formData, gender: event.target.value })
-                    }
-                  >
-                    <option>Select Gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Other</option>
-                  </Form.Control>
-                </Form.Group>
-        
-                <Form.Group controlId="loanAmountInput" className="mt-3">
-                  <Form.Label>Loan Amount</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Enter loan amount"
-                    value={formData.loanAmount}
-                    onChange={(event) =>
-                      setFormData({ ...formData, loanAmount: event.target.value })
-                    }
-                  />
-                </Form.Group>
-        
-                <Form.Group controlId="businessHistoryInput" className="mt-3">
-                  <Form.Label>Business History</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    placeholder="Enter business history"
-                    value={formData.businessHistory}
-                    onChange={(event) =>
-                      setFormData({
-                        ...formData,
-                        businessHistory: event.target.value,
-                      })
-                    }
-                  />
-                </Form.Group>
-        
-                <Form.Group controlId="businessLocationInput" className="mt-3">
-                  <Form.Label>Business Location</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter business location"
-                    value={formData.businessLocation}
-                    onChange={(event) =>
-                      setFormData({
-                        ...formData,
-                        businessLocation: event.target.value,
-                      })
-                    }
-                  />
-                </Form.Group>
-        
-                <Button variant="primary" type="submit" className="mt-3">
-                  Submit
-                </Button>
-              </Form>
-            </Col>
-          </Row>
-        
-          <Modal show={showThankYouModal} onHide={handleCloseThankYouModal}>
-            <Modal.Header closeButton>
-              <Modal.Title>Thank You!</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <p>Your loan application has been successfully submitted.</p>
-              <p>We will review your application and get back to you soon.</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="primary" onClick={handleCloseThankYouModal}>
-                Close
+      <Row className="mt-5">
+        <Col md={6}>
+          <Card className="shadow-sm">
+            <Card.Body>
+              <Card.Title>Apply for a Loan</Card.Title>
+              <Card.Text>
+                Fill out the application form to apply for a loan.
+              </Card.Text>
+              <Button variant="primary" onClick={handleShowApply}>
+                Go to Application
               </Button>
-            </Modal.Footer>
-          </Modal>
-          <div id="pay">
-            <hr/>
-          <h1 className="text-center mt-3">Pay Loan </h1>
-          <PaymentForm/> 
-          </div>
-          <a href="#top">
-          <Button variant="warning" style={{ margin: '10px' }} >
-            🔝 Top
-            </Button>
-            </a>       
-      </Container>
-    );
-  };
-  
-  export default withAuth(Client, 'Loan Applicant (Customer)');
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col md={6}>
+          <Card className="shadow-sm">
+            <Card.Body>
+              <Card.Title>Repay a Loan</Card.Title>
+              <Card.Text>
+                Click below to proceed with your loan repayment.
+              </Card.Text>
+              <Button variant="secondary" onClick={handleShowRepay}>
+                Go to Repayment
+              </Button>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* Apply Loan Modal */}
+      <Modal show={showApplyModal} onHide={handleCloseApply} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Loan Application</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <LoanForm onSuccess={handleCloseApply} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseApply}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+      {/* Repay Loan Modal */}
+      <Modal show={showRepayModal} onHide={handleCloseRepay}>
+        <Modal.Header closeButton>
+          <Modal.Title>Loan Repayment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <PaymentForm onSuccess={handleCloseRepay} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseRepay}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </Container>
+  );
+};
+
+export default withAuth(Client, 'Loan Applicant (Customer)');
