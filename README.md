@@ -65,3 +65,47 @@ This users include:
   
 
  
+
+ 
+# Demo users:
+# loan applicant::
+
+Name: john doe
+pass: 12345
+Email: johndoe@gmail.com
+age: 24
+phone: +254723094596
+Gender: Male
+Loan Amount: 30000
+business History: 5years solo entrepreneur
+Business Location:  Thika
+
+
+Name: Mary Doe
+Email: marydoe23@gmal.com
+pass: mary
+tel: +254726456024
+age: 43
+Loan amount: 100000
+Gender: Female
+Business History: coffee running business for over 5yrs
+Business Location: Nairobi
+
+
+
+# Field Credit Officer::
+Mary James
+email:james10@outlook.com
+pass: james10
+
+# Supervisors::
+Juliet masons
+pass: masons23
+email: masons23@gmail.com
+
+# Office and Administration Staff
+James moore
+pass: morre@
+email: moore56@gmail.com
+
+
