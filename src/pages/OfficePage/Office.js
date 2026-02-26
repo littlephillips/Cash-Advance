@@ -6,6 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import Dashboard from '../AdministrationPage/Dashboard';
 import withAuth from '../../components/withAuth/withAuth';
+import LoanDashboard from '../path/to/LoanDashboard';
 
 const endpoint = process.env.REACT_APP_API_URL;
 
@@ -69,6 +70,7 @@ function Office({ isAuthenticated, onLogout}) {
     </Button>
   )}
 </div>
+<LoanDashboard/>
 <div className="table-responsive">
   <Table striped bordered hover>
     <thead>
