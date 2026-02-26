@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Modal, Card } from 'react-bootstrap';
 import withAuth from '../../components/withAuth/withAuth';
+import LocationPicker from '../../components/LocationPicker/LocationPicker';
+
 
 const endpoint = process.env.REACT_APP_API_URL;
 
@@ -181,14 +183,11 @@ const LoanForm = ({ isAuthenticated, onLogout }) => {
               </Form.Group>
 
               <Form.Group controlId="businessLocationInput" className="mt-3">
-                <Form.Label>Business Location</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter business location"
-                  value={formData.businessLocation}
-                  onChange={(event) => setFormData({ ...formData, businessLocation: event.target.value })}
-                  required
-                />
+                  <LocationPicker
+                      onLocationChange={(location) =>
+                          setFormData({ ...formData, businessLocation: location })
+                      }
+                  />
               </Form.Group>
 
               <Button variant="primary" type="submit" className="mt-3">
