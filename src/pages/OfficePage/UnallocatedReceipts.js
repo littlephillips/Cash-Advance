@@ -107,3 +107,5 @@ const UnallocatedReceipts = () => {
 };
 
 export default UnallocatedReceipts;
+
+// When a payment is submitted, the **backend** checks if the name matches any loan customer. If it does — normal receipt. If it doesn't — it saves it with `unallocated: true`. The office staff then sees it in the `UnallocatedReceipts` table and can manually assign it to the correct customer using the dropdown.
