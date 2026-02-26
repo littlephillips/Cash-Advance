@@ -2,7 +2,7 @@
     import { useNavigate } from "react-router-dom";
     import jwtDecode from "jwt-decode";
 
-    function withAuth(Component, allowedUserType) {
+    function withAuth(Component, ...allowedUserType) {
     function Auth(props) {
         const navigate = useNavigate();
 
@@ -17,7 +17,7 @@
         const decodedToken = jwtDecode(token);
         const userRole = decodedToken.user_type;
 
-        if (userRole !== allowedUserType) {
+        if (!allowedUserType.includes(userRole)) {
             navigate("/unauthorized");
         }
         }, [navigate]);
