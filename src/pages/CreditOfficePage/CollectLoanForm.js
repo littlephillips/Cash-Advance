@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import LocationPicker from '../../components/LocationPicker/LocationPicker';
+
 
 const endpoint = process.env.REACT_APP_API_URL;
 
@@ -120,18 +122,13 @@ const CollectLoanForm = () => {
                             />
                         </Form.Group>
 
-                        <Form.Group controlId="businessLocationInput" className="mb-2">
-                            <Form.Label>Business Location</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="Enter Cient business location"
-                                value={formData.businessLocation}
-                                onChange={(event) =>
-                                    setFormData({ ...formData, businessLocation: event.target.value })
-                                }
-                                required
-                            />
-                        </Form.Group>
+                            <Form.Group controlId="businessLocationInput" className="mb-2">
+                                <LocationPicker
+                                    onLocationChange={(location) =>
+                                        setFormData({ ...formData, businessLocation: location })
+                                    }
+                                />
+                            </Form.Group>
 
                         <Button variant="primary" type="submit" className="w-100 mt-3">
                             Submit
