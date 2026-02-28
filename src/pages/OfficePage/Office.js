@@ -9,6 +9,7 @@ import withAuth from '../../components/withAuth/withAuth';
 import LoanDashboard from './LoanDashboard';
 import CustomerStatement from './CustomerStatement';
 import UnallocatedReceipts from './UnallocatedReceipts';
+import { getLoans, updateLoan } from '../../services/firestoreService';
 
 
 const endpoint = process.env.REACT_APP_API_URL;
@@ -19,32 +20,41 @@ function Office({ isAuthenticated, onLogout}) {
 
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   fetch(`${endpoint}/loans`)
+  //     .then((response) => response.json())
+  //     .then(data => setLoanRequests(data))
+  //     .catch((error) => console.log(error));
+  // }, []);
+
   useEffect(() => {
-    fetch(`${endpoint}/loans`)
-      .then((response) => response.json())
-      .then(data => setLoanRequests(data))
-      .catch((error) => console.log(error));
-  }, []);
+    const fetchData = async () => {
+        const data = await getLoans();
+        setLoanRequests(data);
+    };
+    fetchData();
+}, []);
 
   const handleDisburse = (id, loanDisbursed) => {
-    fetch(`${endpoint}/loans/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ loan: { loanDisbursed } })
-    })
-      .then(response => response.json())
-      .then(data => {
-        const updatedRequests = loanRequests.map(request => {
-          if (request.id === id) {
-            return { ...request, loanDisbursed };
-          }
-          return request;
-        });
-        setLoanRequests(updatedRequests);
-      })
-      .catch(error => console.error(error));
+    // fetch(`${endpoint}/loans/${id}`, {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ loan: { loanDisbursed } })
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     const updatedRequests = loanRequests.map(request => {
+    //       if (request.id === id) {
+    //         return { ...request, loanDisbursed };
+    //       }
+    //       return request;
+    //     });
+    //     setLoanRequests(updatedRequests);
+    //   })
+    //   .catch(error => console.error(error));
+      updateLoan(id, { loanDisbursed });
   };
 
   const handleDisburseLoan = (id) => {

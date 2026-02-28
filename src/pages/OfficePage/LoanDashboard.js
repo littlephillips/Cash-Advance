@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
+import {
+    getLoans,
+    getPayments,
+    getUnallocatedPayments,
+    allocatePayment
+} from '../../services/firestoreService';
 
 const endpoint = process.env.REACT_APP_API_URL;
 
@@ -9,15 +15,17 @@ const LoanDashboard = () => {
 
     useEffect(() => {
         const fetchLoans = async () => {
-            const response = await fetch(`${endpoint}/loans`);
-            const data = await response.json();
-            setLoans(data);
+            // const response = await fetch(`${endpoint}/loans`);
+            // const data = await response.json();
+            // setLoans(data);
+            const loans = await getLoans();
         };
 
         const fetchPayments = async () => {
-            const response = await fetch(`${endpoint}/payment`);
-            const data = await response.json();
-            setPayments(data);
+            // const response = await fetch(`${endpoint}/payment`);
+            // const data = await response.json();
+            // setPayments(data);
+            const payments = await getPayments();
         };
 
         fetchLoans();

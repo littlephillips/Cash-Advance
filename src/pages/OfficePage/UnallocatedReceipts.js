@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table, Badge, Button, Alert } from 'react-bootstrap';
+import {
+    getLoans,
+    getPayments,
+    getUnallocatedPayments,
+    allocatePayment
+} from '../../services/firestoreService';
 
 const endpoint = process.env.REACT_APP_API_URL;
 
@@ -14,15 +20,17 @@ const UnallocatedReceipts = () => {
     }, []);
 
     const fetchUnallocated = async () => {
-        const response = await fetch(`${endpoint}/payment?unallocated=true`);
-        const data = await response.json();
-        setUnallocated(data);
+        // const response = await fetch(`${endpoint}/payment?unallocated=true`);
+        // const data = await response.json();
+        // setUnallocated(data);
+        const unallocated = await getUnallocatedPayments();
     };
 
     const fetchLoans = async () => {
-        const response = await fetch(`${endpoint}/loans`);
-        const data = await response.json();
-        setLoans(data);
+        // const response = await fetch(`${endpoint}/loans`);
+        // const data = await response.json();
+        // setLoans(data);
+        const loans = await getLoans();
     };
 
     // Office staff can manually allocate a receipt to a customer

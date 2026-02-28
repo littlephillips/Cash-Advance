@@ -1,16 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
 
+import { getClients } from '../../services/firestoreService';
+
+
 const endpoint = process.env.REACT_APP_API_URL;
 
 const Loanee = () => {
 const [data, setData] = useState([]);
 
+// useEffect(() => {
+//     const fetchData = async () => {
+//     const response = await fetch(`${endpoint}/clients`);
+//     const jsonData = await response.json();
+//     setData(jsonData);
+//     };
+//     fetchData();
+// }, []);
+
 useEffect(() => {
     const fetchData = async () => {
-    const response = await fetch(`${endpoint}/clients`);
-    const jsonData = await response.json();
-    setData(jsonData);
+        const data = await getClients();
+        setData(data);
     };
     fetchData();
 }, []);

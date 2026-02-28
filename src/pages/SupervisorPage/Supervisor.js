@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Table, Button } from "react-bootstrap";
 
 import withAuth from "../../components/withAuth/withAuth";
+import { getLoans, updateLoan } from '../../services/firestoreService';
+
 
 const endpoint = process.env.REACT_APP_API_URL;
 
@@ -10,32 +12,42 @@ const Supervisor = ({ isAuthenticated, onLogout }) => {
   const [loanRequests, setLoanRequests] = useState([]);
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   fetch(`${endpoint}/loans`)
+  //     .then(response => response.json())
+  //     .then(data => setLoanRequests(data))
+  //     .catch(error => console.error(error));
+  // }, []);
+
   useEffect(() => {
-    fetch(`${endpoint}/loans`)
-      .then(response => response.json())
-      .then(data => setLoanRequests(data))
-      .catch(error => console.error(error));
-  }, []);
+    const fetchData = async () => {
+        const data = await getLoans();
+        setLoanRequests(data);
+    };
+    fetchData();
+}, []);
 
   const updateLoanStatus = (id, loanStatus) => {
-    fetch(`${endpoint}/loans/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ loan: { loanStatus } })
-    })
-      .then(response => response.json())
-      .then(data => {
-        const updatedRequests = loanRequests.map(request => {
-          if (request.id === id) {
-            return { ...request, loanStatus };
-          }
-          return request;
-        });
-        setLoanRequests(updatedRequests);
-      })
-      .catch(error => console.error(error));
+    // fetch(`${endpoint}/loans/${id}`, {
+    //   method: 'PUT',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ loan: { loanStatus } })
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     const updatedRequests = loanRequests.map(request => {
+    //       if (request.id === id) {
+    //         return { ...request, loanStatus };
+    //       }
+    //       return request;
+    //     });
+    //     setLoanRequests(updatedRequests);
+    //   })
+    //   .catch(error => console.error(error));
+    updateLoan(id, { loanStatus });
+
   };
 
   const handleApproveLoan = (id) => {

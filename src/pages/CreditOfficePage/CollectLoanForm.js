@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import LocationPicker from '../../components/LocationPicker/LocationPicker';
+import { createClient } from '../../services/firestoreService';
 
 
 const endpoint = process.env.REACT_APP_API_URL;
@@ -20,29 +21,34 @@ const CollectLoanForm = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            const response = await fetch(`${endpoint}/datums`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+        // try {
+        //     const response = await fetch(`${endpoint}/datums`, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify(formData),
+        //     });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
 
-            // Show success alert
-            setAlertVariant('success');
-            setAlertMessage('Form submitted successfully!');
-            setShowAlert(true);
-        } catch (error) {
-            // Show error alert
-            setAlertVariant('danger');
-            setAlertMessage('Error submitting form');
-            setShowAlert(true);
-        }
+        //     // Show success alert
+        //     setAlertVariant('success');
+        //     setAlertMessage('Form submitted successfully!');
+        //     setShowAlert(true);
+        // } catch (error) {
+        //     // Show error alert
+        //     setAlertVariant('danger');
+        //     setAlertMessage('Error submitting form');
+        //     setShowAlert(true);
+        // }
+
+        await createClient(formData);
+        setAlertVariant('success');
+        setAlertMessage('Form submitted successfully!');
+        setShowAlert(true);
 
         // Reset form data
         setFormData({

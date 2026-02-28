@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Form, Button, Modal, Card } from 'react-bootstrap';
 import withAuth from '../../components/withAuth/withAuth';
 import LocationPicker from '../../components/LocationPicker/LocationPicker';
+import { createClient } from '../../services/firestoreService';
 
 
 const endpoint = process.env.REACT_APP_API_URL;
@@ -27,28 +28,35 @@ const LoanForm = ({ isAuthenticated, onLogout }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const response = await fetch(`${endpoint}/clients`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+    // try {
+    //   const response = await fetch(`${endpoint}/clients`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(formData),
+    //   });
 
-      if (response.status === 201) {
-        setAlertVariant('success');
-        setAlertMessage('Loan Application submitted successfully!');
-        setShowAlert(true);
-        setShowThankYouModal(true);
-      } else {
-        throw new Error('Network response was not ok');
-      }
-    } catch (error) {
-      setAlertVariant('danger');
-      setAlertMessage('Loan Application Failed! Try Again');
-      setShowAlert(true);
-    }
+    //   if (response.status === 201) {
+    //     setAlertVariant('success');
+    //     setAlertMessage('Loan Application submitted successfully!');
+    //     setShowAlert(true);
+    //     setShowThankYouModal(true);
+    //   } else {
+    //     throw new Error('Network response was not ok');
+    //   }
+    // } catch (error) {
+    //   setAlertVariant('danger');
+    //   setAlertMessage('Loan Application Failed! Try Again');
+    //   setShowAlert(true);
+    // }
+
+    await createClient(formData);
+    setAlertVariant('success');
+    setAlertMessage('Loan Application submitted successfully!');
+    setShowAlert(true);
+    setShowThankYouModal(true);
+
 
     setFormData({
       fullName: '',
