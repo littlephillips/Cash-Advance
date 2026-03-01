@@ -20,33 +20,22 @@ const UnallocatedReceipts = () => {
     }, []);
 
     const fetchUnallocated = async () => {
-        // const response = await fetch(`${endpoint}/payment?unallocated=true`);
-        // const data = await response.json();
-        // setUnallocated(data);
-        const unallocated = await getUnallocatedPayments();
+        const data = await getUnallocatedPayments();
+        setUnallocated(data);
     };
 
     const fetchLoans = async () => {
-        // const response = await fetch(`${endpoint}/loans`);
-        // const data = await response.json();
-        // setLoans(data);
-        const loans = await getLoans();
+        const data = await getLoans();
+        setLoans(data);
     };
 
     // Office staff can manually allocate a receipt to a customer
     const handleAllocate = async (paymentId, fullName) => {
         try {
-            const response = await fetch(`${endpoint}/payment/${paymentId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ fullName, unallocated: false }),
-            });
-
-            if (response.ok) {
-                setSuccessMessage(`Payment successfully allocated to ${fullName}`);
-                fetchUnallocated(); // refresh the list
-                setTimeout(() => setSuccessMessage(''), 3000);
-            }
+            await allocatePayment(paymentId, fullName);
+            setSuccessMessage(`Payment successfully allocated to ${fullName}`);
+            fetchUnallocated();
+            setTimeout(() => setSuccessMessage(''), 3000);
         } catch (error) {
             console.error(error);
         }
