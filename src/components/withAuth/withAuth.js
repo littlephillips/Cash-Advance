@@ -1,31 +1,27 @@
-    import { useEffect } from "react";
-    import { useNavigate } from "react-router-dom";
-    import jwtDecode from "jwt-decode";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-    function withAuth(Component, ...allowedUserType) {
+function withAuth(Component, ...allowedUserTypes) {
     function Auth(props) {
         const navigate = useNavigate();
 
         useEffect(() => {
-        const token = localStorage.getItem("token");
+            const userRole = localStorage.getItem('userRole');
 
-        if (!token) {
-            navigate("/login");
-            return;
-        }
+            if (!userRole) {
+                navigate("/login");
+                return;
+            }
 
-        const decodedToken = jwtDecode(token);
-        const userRole = decodedToken.user_type;
-
-        if (!allowedUserType.includes(userRole)) {
-            navigate("/unauthorized");
-        }
+            if (!allowedUserTypes.includes(userRole)) {
+                navigate("/unauthorized");
+            }
         }, [navigate]);
 
         return <Component {...props} />;
     }
 
     return Auth;
-    }
+}
 
-    export default withAuth;
+export default withAuth;

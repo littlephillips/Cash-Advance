@@ -1,145 +1,150 @@
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-
-const endpoint = process.env.REACT_APP_API_URL;
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { addDoc, collection } from 'firebase/firestore';
+import { auth, db } from '../../firebase';
 
 function Signup() {
-const [formData, setFormData] = useState({
-    fullname: '',
-    email: '',
-    password: '',
-    userType: ''
-});
-
-const [showSuccess, setShowSuccess] = useState(false);
-const [showError, setShowError] = useState(false);
-
-const navigate = useNavigate();
-
-const handleInputChange = (e) => {
-    setFormData((prevFormData) => ({
-    ...prevFormData,
-    [e.target.name]: e.target.value
-    }));
-};
-
-const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-    const response = await fetch(`${endpoint}/user`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user: formData }),
+    const [formData, setFormData] = useState({
+        fullname: '',
+        email: '',
+        password: '',
+        userType: ''
     });
 
-    if (response.ok) {
-        setShowSuccess(true);
-        setShowError(false);
-        setFormData({ fullname: '', email: '', password: '', userType: '' }); // resetting form input to empty
-        setTimeout(() => {
-        setShowSuccess(false);
-        navigate('/login'); 
-        }, 1000);
-    } else {
-        setShowSuccess(false);
-        setShowError(true);
-    }
-    } catch (error) {
-    console.error(error);
-    setShowSuccess(false);
-    setShowError(true);
-    }
-};
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
 
+    const handleInputChange = (e) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [e.target.name]: e.target.value
+        }));
+    };
 
-return (
-    <div className="d-flex justify-content-center">
-    <div className="col-lg-6">
-        <h1>Cash Advance Signup</h1>
-        <hr />
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            // Create user in Firebase Auth
+            const userCredential = await createUserWithEmailAndPassword(
+                auth,
+                formData.email,
+                formData.password
+            );
 
-        <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formFullName" style={{ marginBottom: '10px' }}>
-            <Form.Label>Full name</Form.Label>
-            <Form.Control
-            type="text"
-            placeholder="Enter your Full name"
-            name="fullname"
-            value={formData.fullname}
-            onChange={handleInputChange}
-            required
-            />
-        </Form.Group>
+            // Save user profile to Firestore users collection
+            await addDoc(collection(db, 'users'), {
+                fullname: formData.fullname,
+                email: formData.email,
+                userType: formData.userType,
+                uid: userCredential.user.uid,
+            });
 
-        <Form.Group controlId="formEmail" style={{ marginBottom: '10px' }}>
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-            type="email"
-            placeholder="Enter email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            required
-            />
-        </Form.Group>
+            setShowSuccess(true);
+            setShowError(false);
+            setFormData({ fullname: '', email: '', password: '', userType: '' });
 
-        <Form.Group controlId="formUserType" style={{ marginBottom: '10px' }}>
-            <Form.Label>User Type</Form.Label>
-            <Form.Control
-            as="select"
-            name="userType"
-            value={formData.userType}
-            onChange={handleInputChange}
-            required
-            >
-        <option value="">Select User Type</option>
-        <option value="fieldCreditOfficer">Field Credit Officer</option>
-        <option value="supervisor">Supervisor</option>
-        <option value="loanApplicant">Loan Applicant (Customer)</option>
-        <option value="officeStaff">Office Staff</option>
-        <option value="adminStaff">Administration Staff</option>
-        </Form.Control>
-    </Form.Group>
+            setTimeout(() => {
+                setShowSuccess(false);
+                navigate('/login');
+            }, 1500);
 
-    <Form.Group controlId="formPassword" style={{ marginBottom: '10px' }}>
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-        type="password"
-        placeholder="Password"
-        name="password"
-        value={formData.password}
-        onChange={handleInputChange}
-        required
-        />
-    </Form.Group>
+        } catch (error) {
+            console.error(error);
+            setShowError(true);
+            setErrorMessage(
+                error.code === 'auth/email-already-in-use'
+                    ? 'This email is already registered. Please login.'
+                    : 'Registration failed. Please try again.'
+            );
+        }
+    };
 
-    <Button variant="primary" type="submit">
-        Sign Up
-    </Button>
-    </Form>
+    return (
+        <div className="d-flex justify-content-center mt-5">
+            <div className="col-lg-6">
+                <h1>Cash Advance Signup</h1>
+                <hr />
 
-    {showSuccess && (
-    <Alert variant="success" style={{ marginTop: '10px' }}>
-        Registration successful!
-    </Alert>
-    )}
+                {showSuccess && (
+                    <Alert variant="success">
+                        Registration successful! Redirecting to login...
+                    </Alert>
+                )}
+                {showError && (
+                    <Alert variant="danger">{errorMessage}</Alert>
+                )}
 
-    {showError && (
-    <Alert variant="danger" style={{ marginTop: '10px' }}>
-        Registration failed. Please try again later.
-    </Alert>
-    )}
-    <div style={{ marginTop: '10px' }}>
-        Already have an account?{' '}
-        <Link to="/" style={{ marginRight: '22px' }}>Login</Link>
-    </div>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId="formFullName" style={{ marginBottom: '10px' }}>
+                        <Form.Label>Full Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter your full name"
+                            name="fullname"
+                            value={formData.fullname}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Form.Group>
 
+                    <Form.Group controlId="formEmail" style={{ marginBottom: '10px' }}>
+                        <Form.Label>Email Address</Form.Label>
+                        <Form.Control
+                            type="email"
+                            placeholder="Enter email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Form.Group>
 
-</div>
+                    <Form.Group controlId="formUserType" style={{ marginBottom: '10px' }}>
+                        <Form.Label>User Type</Form.Label>
+                        <Form.Control
+                            as="select"
+                            name="userType"
+                            value={formData.userType}
+                            onChange={handleInputChange}
+                            required
+                        >
+                            <option value="">Select User Type</option>
+                            <option value="Field Credit Officer">Field Credit Officer</option>
+                            <option value="Supervisor">Supervisor</option>
+                            <option value="Loan Applicant (Customer)">Loan Applicant (Customer)</option>
+                            <option value="Office Staff">Office Staff</option>
+                            <option value="Administration Staff">Administration Staff</option>
+                        </Form.Control>
+                    </Form.Group>
 
-</div>
-);
+                    <Form.Group controlId="formPassword" style={{ marginBottom: '10px' }}>
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="Minimum 6 characters"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Button variant="primary" type="submit" className="mt-2">
+                        Sign Up
+                    </Button>
+                </Form>
+
+                <div style={{ marginTop: '10px' }}>
+                    Already have an account?{' '}
+                    <Link to="/login">Login</Link>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default Signup;

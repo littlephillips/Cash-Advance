@@ -24,21 +24,17 @@ const [isAuthenticated, setIsAuthenticated] = useState(false);
 const location = useLocation();
 
 useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-    const decodedToken = jwtDecode(token);
-    if (decodedToken.exp * 1000 > Date.now()) {
+    const userRole = localStorage.getItem('userRole');
+    if (userRole) {
         setIsAuthenticated(true);
-    } else {
-        localStorage.removeItem('token');
-    }
     }
 }, []);
 
 const handleLogout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('token');
-}
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userEmail');
+};
 
 const shouldShowHeader = location.pathname === "/";
 

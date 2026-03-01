@@ -1,9 +1,9 @@
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
-
-const endpoint = process.env.REACT_APP_API_URL;
+import { useNavigate, Link } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getDocs, collection, query, where } from 'firebase/firestore';
+import { auth, db } from '../../firebase';
 
 function Login({ setIsAuthenticated }) {
     const [formData, setFormData] = useState({
@@ -13,6 +13,7 @@ function Login({ setIsAuthenticated }) {
     });
     const [showSuccess, setShowSuccess] = useState(false);
     const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
@@ -21,68 +22,75 @@ function Login({ setIsAuthenticated }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
-            const response = await fetch(`${endpoint}/sessions`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+            // Sign in with Firebase Auth
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                formData.email,
+                formData.password
+            );
 
-            if (response.ok) {
-                setShowSuccess(true);
-                setShowError(false);
-                setFormData({ email: '', password: '', userType: '' }); // Resetting form input
+            const user = userCredential.user;
 
-                const data = await response.json();
-                const token = data.token;
-                localStorage.setItem('token', token);
-                setIsAuthenticated(true);
+            // Get user role from Firestore users collection
+            const q = query(
+                collection(db, 'users'),
+                where('email', '==', formData.email)
+            );
+            const snapshot = await getDocs(q);
 
-                const decodedToken = jwtDecode(token);
-                const userRole = decodedToken.user_type;
-
-                setTimeout(() => {
-                    setShowSuccess(false);
-
-                    // Role-to-route mapping
-                    const roleRoutes = {
-                        'Supervisor': '/supervisor',
-                        'Field Credit Officer': '/credit',
-                        'Loan Applicant (Customer)': '/client',
-                        'Office Staff': '/office',
-                        'Administration Staff': '/office',
-                    };
-
-                    const route = roleRoutes[userRole];
-
-                    if (route) {
-                        navigate(route);
-                    } else {
-                        console.error('Unauthorized role:', userRole);
-                    }
-                }, 1000);
-            } else {
-                setShowSuccess(false);
+            if (snapshot.empty) {
+                setErrorMessage('User profile not found. Please sign up again.');
                 setShowError(true);
+                return;
             }
+
+            const userData = snapshot.docs[0].data();
+            const userRole = userData.userType;
+
+            // Store role in localStorage for withAuth
+            localStorage.setItem('userRole', userRole);
+            localStorage.setItem('userEmail', formData.email);
+            setIsAuthenticated(true);
+
+            setShowSuccess(true);
+            setFormData({ email: '', password: '', userType: '' });
+
+            // Role-to-route mapping
+            const roleRoutes = {
+                'Supervisor': '/supervisor',
+                'Field Credit Officer': '/credit',
+                'Loan Applicant (Customer)': '/client',
+                'Office Staff': '/office',
+                'Administration Staff': '/office',
+            };
+
+            setTimeout(() => {
+                setShowSuccess(false);
+                const route = roleRoutes[userRole];
+                if (route) {
+                    navigate(route);
+                } else {
+                    setErrorMessage('Unknown user role. Please contact support.');
+                    setShowError(true);
+                }
+            }, 1000);
+
         } catch (error) {
             console.error(error);
-            setShowSuccess(false);
             setShowError(true);
+            setErrorMessage('Login failed. Check your email and password.');
         }
     };
 
     return (
-        <div className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center mt-5">
             <div className="col-lg-6">
                 <h1>Cash Advance Login</h1>
                 <hr />
                 {showSuccess && <Alert variant="success">Login successful!</Alert>}
-                {showError && <Alert variant="danger">Login failed. Please try again.</Alert>}
-                
+                {showError && <Alert variant="danger">{errorMessage}</Alert>}
+
                 <Form onSubmit={handleSubmit}>
                     <Form.Group controlId="formEmail" style={{ marginBottom: '10px' }}>
                         <Form.Label>Email</Form.Label>
@@ -94,23 +102,6 @@ function Login({ setIsAuthenticated }) {
                             onChange={handleInputChange}
                             required
                         />
-                    </Form.Group>
-
-                    <Form.Group controlId="formUserType" style={{ marginBottom: '10px' }}>
-                        <Form.Label>User Type</Form.Label>
-                        <Form.Control
-                            as="select"
-                            name="userType"
-                            value={formData.userType}
-                            onChange={handleInputChange}
-                        >
-                            <option value="">Select User Type</option>
-                            <option value="Supervisor">Supervisor</option>
-                            <option value="Field Credit Officer">Field Credit Officer</option>
-                            <option value="Loan Applicant (Customer)">Loan Applicant (Customer)</option>
-                            <option value="Office Staff">Office Staff</option>
-                            <option value="Administration Staff">Administration Staff</option>
-                        </Form.Control>
                     </Form.Group>
 
                     <Form.Group controlId="formPassword" style={{ marginBottom: '10px' }}>
@@ -125,8 +116,12 @@ function Login({ setIsAuthenticated }) {
                         />
                     </Form.Group>
 
-                    <Button type="submit">Login</Button>
+                    <Button type="submit" className="mt-2">Login</Button>
                 </Form>
+                <div style={{ marginTop: '10px' }}>
+                    Don't have an account?{' '}
+                    <Link to="/signup">Sign Up</Link>
+                </div>
             </div>
         </div>
     );
