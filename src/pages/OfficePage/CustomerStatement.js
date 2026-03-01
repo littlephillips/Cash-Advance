@@ -22,17 +22,13 @@ const CustomerStatement = () => {
 
     useEffect(() => {
         const fetchLoans = async () => {
-            // const response = await fetch(`${endpoint}/loans`);
-            // const data = await response.json();
-            // setLoans(data);
-            const loans = await getLoans();
+            const data = await getLoans();
+            setLoans(data);
         };
 
         const fetchPayments = async () => {
-            // const response = await fetch(`${endpoint}/payment`);
-            // const data = await response.json();
-            // setPayments(data);
             const payments = await getPayments();
+            setPayments(payments);
           };
 
         fetchLoans();
