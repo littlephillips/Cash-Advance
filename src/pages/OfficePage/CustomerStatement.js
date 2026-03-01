@@ -7,13 +7,10 @@ import {
     allocatePayment
 } from '../../services/firestoreService';
 
-
-const endpoint = process.env.REACT_APP_API_URL;
-
 const INTEREST_RATE = 3;
 const LOAN_TENURE = 2;
 const PROCESSING_FEE = 300;
-const LATE_PENALTY_RATE = 5; // 5% of outstanding
+const LATE_PENALTY_RATE = 5; 
 
 const CustomerStatement = () => {
     const [loans, setLoans] = useState([]);

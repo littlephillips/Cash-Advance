@@ -2,12 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Container, Table, Badge, Button, Alert } from 'react-bootstrap';
 import {
     getLoans,
-    getPayments,
     getUnallocatedPayments,
     allocatePayment
 } from '../../services/firestoreService';
-
-const endpoint = process.env.REACT_APP_API_URL;
 
 const UnallocatedReceipts = () => {
     const [unallocated, setUnallocated] = useState([]);

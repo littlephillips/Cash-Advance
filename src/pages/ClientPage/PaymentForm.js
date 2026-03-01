@@ -3,9 +3,6 @@ import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { createPayment, getLoans } from '../../services/firestoreService';
 
-
-const endpoint = process.env.REACT_APP_API_URL;
-
 function PaymentForm() {
     const [formData, setFormData] = useState({
         amount: '',
@@ -19,31 +16,7 @@ function PaymentForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // try {
-        //     const response = await fetch(`${endpoint}/payment`, {
-        //         method: 'POST',
-        //         body: JSON.stringify(formData),
-        //         headers: { 'Content-Type': 'application/json' },
-        //     });
-        //     const data = await response.json();
 
-        //     if (response.ok) {
-        //         // Backend tells us if payment was unallocated
-        //         setIsUnallocated(data.unallocated === true);
-        //         setShowSuccessModal(true);
-        //         setTimeout(() => {
-        //             setShowSuccessModal(false);
-        //             setFormData({ amount: '', payment_means: '', fullName: '' });
-        //             navigate('/client');
-        //         }, 3000);
-        //     } else {
-        //         throw new Error(data.message || 'Error submitting payment.');
-        //     }
-        // } catch (error) {
-        //     console.error(error);
-        //     setShowErrorModal(true);
-        //     setTimeout(() => setShowErrorModal(false), 5000);
-        // }
         const loans = await getLoans();
         const result = await createPayment(formData, loans);
         setIsUnallocated(result.unallocated === true);

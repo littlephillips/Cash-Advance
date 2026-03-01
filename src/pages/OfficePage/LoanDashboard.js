@@ -7,8 +7,6 @@ import {
     allocatePayment
 } from '../../services/firestoreService';
 
-const endpoint = process.env.REACT_APP_API_URL;
-
 const LoanDashboard = () => {
     const [loans, setLoans] = useState([]);
     const [payments, setPayments] = useState([]);

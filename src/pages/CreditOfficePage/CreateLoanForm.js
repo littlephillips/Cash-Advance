@@ -3,8 +3,6 @@ import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import LoanTable from './LoanTable';
 import { createLoan } from '../../services/firestoreService';
 
-const endpoint = process.env.REACT_APP_API_URL;
-
 // Fixed loan product parameters per company policy
 const INTEREST_RATE = 3;        // 3% per month
 const LOAN_TENURE = 2;          // 2 months
@@ -51,28 +49,6 @@ const CreateLoanForm = () => {
       loanStatus: 'Pending',
       loanDisbursed: 'No',
     };
-
-  //   try {
-  //     const response = await fetch(`${endpoint}/loans`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(payload),
-  //     });
-
-  //     if (!response.ok) throw new Error('Network response was not ok');
-
-  //     setAlertVariant('success');
-  //     setAlertMessage('Loan created successfully!');
-  //     setShowAlert(true);
-  //   } catch (error) {
-  //     setAlertVariant('danger');
-  //     setAlertMessage('Loan creation failed. Please try again.');
-  //     setShowAlert(true);
-  //   }
-
-  //   setFormData({ fullName: '', loanAmount: '' });
-  //   setTimeout(() => setShowAlert(false), 3000);
-  // };
 
   await createLoan(payload);
   setAlertVariant('success');
