@@ -211,6 +211,7 @@ src/
 | Name | Email | Password |
 |---|---|---|
 | James Moore | moore56@gmail.com | morre@ |
+| artificial intelligence | littleartificial010@gmail.com | 123456 |
 
 ---
 
