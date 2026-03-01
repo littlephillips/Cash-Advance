@@ -191,8 +191,8 @@ src/
 
 | Name | Email | Password |
 |---|---|---|
-| John Doe | johndoe@gmail.com | 12345 |
-| Mary Doe | marydoe23@gmail.com | mary |
+| John Doe | johndoe@gmail.com | 123456 |
+| Mary Doe | marydoe23@gmail.com | mary34 |
 
 ### Field Credit Officer
 
@@ -206,11 +206,16 @@ src/
 |---|---|---|
 | Juliet Masons | masons23@gmail.com | masons23 |
 
-### Office & Administration Staff
+### Office Staff
 
 | Name | Email | Password |
 |---|---|---|
 | James Moore | moore56@gmail.com | morre@ |
+
+###  Administration Staff
+
+| Name | Email | Password |
+|---|---|---|
 | artificial intelligence | littleartificial010@gmail.com | 123456 |
 
 ---
