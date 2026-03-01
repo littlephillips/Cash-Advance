@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Table, Badge, Button } from 'react-bootstrap';
-import {
-    getLoans,
-    getPayments,
-    getUnallocatedPayments,
-    allocatePayment
-} from '../../services/firestoreService';
+import { getLoans, getPayments} from '../../services/firestoreService';
 
 const INTEREST_RATE = 3;
 const LOAN_TENURE = 2;

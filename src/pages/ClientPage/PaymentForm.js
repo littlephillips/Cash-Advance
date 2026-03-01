@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import { createPayment, getLoans } from '../../services/firestoreService';
 
 function PaymentForm() {
@@ -12,7 +11,6 @@ function PaymentForm() {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [isUnallocated, setIsUnallocated] = useState(false);
-    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();

@@ -3,22 +3,10 @@ import { Table, Button } from "react-bootstrap";
 import { useMediaQuery } from "react-responsive";
 import { getLoans } from '../../services/firestoreService';
 
-
-const endpoint = process.env.REACT_APP_API_URL;
-
 const LoanTable = () => {
 const [loans, setLoans] = useState([]);
 
 const isSmallScreen = useMediaQuery({ maxWidth: 768 });
-
-// useEffect(() => {
-// const fetchData = async () => {
-// const response = await fetch(`${endpoint}/loans`);
-// const data = await response.json();
-// setLoans(data);
-// };
-// fetchData();
-// }, []);
 
 useEffect(() => {
     const fetchData = async () => {
