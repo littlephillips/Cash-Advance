@@ -129,8 +129,10 @@ function Signup() {
                             name="password"
                             value={formData.password}
                             onChange={handleInputChange}
+                            minLength={6}
                             required
                         />
+                        <Form.Text muted>Password must be at least 6 characters.</Form.Text>
                     </Form.Group>
 
                     <Button variant="primary" type="submit" className="mt-2">
